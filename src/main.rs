@@ -55,9 +55,9 @@ fn main() -> Result<(), AppError> {
             let title_escaped = c.title.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
 
             let display = format!(
-                "  {:<class_w$}  <span color='{}'>{:<ws_w$}</span>  {}",
-                class_escaped,
+                "<span color='{}'>  {:<class_w$}  {:<ws_w$}  {}</span>",
                 color,
+                class_escaped,
                 workspace,
                 title_escaped,
                 class_w = max_class_width,
