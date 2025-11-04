@@ -34,11 +34,28 @@ fn main() -> Result<(), AppError> {
             // Use class name as icon (convert to lowercase for standard icon names)
             let icon = c.class.to_lowercase();
             let workspace = &c.workspace.name;
+
+            // Assign color based on workspace ID
+            let color = match c.workspace.id % 6 {
+                0 => "#e06c75", // red
+                1 => "#98c379", // green
+                2 => "#e5c07b", // yellow
+                3 => "#61afef", // blue
+                4 => "#c678dd", // purple
+                5 => "#56b6c2", // cyan
+                _ => "#abb2bf", // default
+            };
+
+            // Escape markup characters in text
+            let class_escaped = c.class.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+            let title_escaped = c.title.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+
             let display = format!(
-                "  {:<class_w$}  {:<ws_w$}  {}",
-                c.class,
+                "  {:<class_w$}  <span color='{}'>{:<ws_w$}</span>  {}",
+                class_escaped,
+                color,
                 workspace,
-                c.title,
+                title_escaped,
                 class_w = max_class_width,
                 ws_w = max_workspace_width
             );
@@ -50,6 +67,7 @@ fn main() -> Result<(), AppError> {
     let mut child = Command::new("rofi")
         .arg("-dmenu")
         .arg("-show-icons")
+        .arg("-markup-rows")
         .arg("-format")
         .arg("i")
         .arg("-p")
