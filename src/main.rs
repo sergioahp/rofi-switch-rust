@@ -35,15 +35,19 @@ fn main() -> Result<(), AppError> {
             let icon = c.class.to_lowercase();
             let workspace = &c.workspace.name;
 
-            // Assign color based on workspace ID
-            let color = match c.workspace.id % 6 {
-                0 => "#e06c75", // red
-                1 => "#98c379", // green
-                2 => "#e5c07b", // yellow
-                3 => "#61afef", // blue
-                4 => "#c678dd", // purple
-                5 => "#56b6c2", // cyan
-                _ => "#abb2bf", // default
+            // Assign color based on workspace ID (Tokyo Night theme from gtk-status-bar)
+            let color = match c.workspace.id {
+                1 => "#7AA2F7",  // Blue
+                2 => "#7DCFFF",  // Light Blue
+                3 => "#9ECE6A",  // Green
+                4 => "#BB9AF7",  // Purple
+                5 => "#F7768E",  // Pink/Red
+                6 => "#FF9E66",  // Orange
+                7 => "#9D7CD8",  // Purple/Lavender
+                8 => "#E0AF68",  // Gold/Yellow
+                9 => "#2AC3DE",  // Cyan
+                10 => "#0DB9D7", // Teal
+                _ => "#43E97B",  // Bright Green (default)
             };
 
             // Escape markup characters in text
