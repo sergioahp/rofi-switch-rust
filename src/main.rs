@@ -23,7 +23,7 @@ fn main() -> Result<(), AppError> {
 
     let max_workspace_width = clients_vec
         .iter()
-        .map(|c| c.workspace.id.to_string().len())
+        .map(|c| c.workspace.name.len())
         .max()
         .unwrap_or(0);
 
@@ -33,7 +33,7 @@ fn main() -> Result<(), AppError> {
         .map(|c| {
             // Use class name as icon (convert to lowercase for standard icon names)
             let icon = c.class.to_lowercase();
-            let workspace = c.workspace.id.to_string();
+            let workspace = &c.workspace.name;
             let display = format!(
                 "  {:<class_w$}  {:<ws_w$}  {}",
                 c.class,
