@@ -34,3 +34,15 @@ impl From<std::ffi::FromBytesUntilNulError> for AppError {
         AppError::Parse(format!("Failed to parse output: {}", err))
     }
 }
+
+impl From<std::num::ParseIntError> for AppError {
+    fn from(err: std::num::ParseIntError) -> Self {
+        AppError::Parse(format!("Failed to parse integer: {}", err))
+    }
+}
+
+impl From<std::string::FromUtf8Error> for AppError {
+    fn from(err: std::string::FromUtf8Error) -> Self {
+        AppError::Parse(format!("Failed to parse UTF-8: {}", err))
+    }
+}
