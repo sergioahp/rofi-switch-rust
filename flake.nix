@@ -47,7 +47,7 @@
           ];
 
           # Additional environment variables can be set directly
-          # MY_CUSTOM_VAR = "some value";
+          ROFI_BIN = "${pkgs.rofi}/bin/rofi";
         };
 
         # Build *just* the cargo dependencies, so we can reuse

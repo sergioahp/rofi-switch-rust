@@ -68,7 +68,10 @@ fn main() -> Result<(), AppError> {
         .collect::<Vec<_>>()
         .join("\n");
 
-    let mut child = Command::new("rofi")
+    // Use rofi path from Nix build, or fallback to "rofi" for development
+    let rofi_bin = option_env!("ROFI_BIN").unwrap_or("rofi");
+
+    let mut child = Command::new(rofi_bin)
         .arg("-dmenu")
         .arg("-show-icons")
         .arg("-markup-rows")
