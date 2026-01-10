@@ -85,6 +85,10 @@ fn main() -> Result<(), AppError> {
         .arg("")
         .arg("-kb-custom-1")
         .arg("Shift+Return")
+        .arg("-theme-str")
+        .arg("element selected { background-color: rgba(30,32,48,0.9); }")
+        .arg("-theme-str")
+        .arg("element selected normal, element selected active { background-color: rgba(30,32,48,0.9); }")
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .spawn()?;
