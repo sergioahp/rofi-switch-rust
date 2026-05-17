@@ -68,10 +68,23 @@ fn main() -> Result<(), AppError> {
         .collect::<Vec<_>>()
         .join("\n");
 
-    // Use rofi path from Nix build, or fallback to "rofi" for development
-    let rofi_bin = option_env!("ROFI_BIN").unwrap_or("rofi");
+    // Rofi binary: prefer $ROFI_BIN at runtime so consumers (e.g. home-manager with a
+    // rofi overlay) can point at a different rofi than the one baked in at build time.
+    // Falls back to the compile-time ROFI_BIN (set by the flake's commonArgs), then
+    // to "rofi" on PATH for plain `cargo run` development.
+    let rofi_bin = std::env::var("ROFI_BIN")
+        .ok()
+        .or_else(|| option_env!("ROFI_BIN").map(String::from))
+        .unwrap_or_else(|| "rofi".to_string());
 
-    let mut child = Command::new(rofi_bin)
+    // Extra rofi args from $ROFI_EXTRA_ARGS (whitespace-split). Appended after the
+    // built-in args so they can override (e.g. `-matching fzf -sorting-method fzf`).
+    let rofi_extra_args: Vec<String> = std::env::var("ROFI_EXTRA_ARGS")
+        .ok()
+        .map(|s| s.split_whitespace().map(String::from).collect())
+        .unwrap_or_default();
+
+    let mut child = Command::new(&rofi_bin)
         .arg("-dmenu")
         .arg("-show-icons")
         .arg("-markup-rows")
@@ -89,6 +102,7 @@ fn main() -> Result<(), AppError> {
         .arg("element selected { background-color: rgba(30,32,48,0.9); }")
         .arg("-theme-str")
         .arg("element selected normal, element selected active { background-color: rgba(30,32,48,0.9); }")
+        .args(&rofi_extra_args)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .spawn()?;
