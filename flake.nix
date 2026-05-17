@@ -46,8 +46,13 @@
             pkgs.libiconv
           ];
 
-          # Additional environment variables can be set directly
-          ROFI_BIN = "${pkgs.rofi}/bin/rofi";
+          # No compile-time ROFI_BIN: baking a /nix/store/...-rofi path here
+          # pulls that exact rofi into every consumer's closure (including
+          # consumers that override rofi via an overlay), which defeats the
+          # override. The binary reads $ROFI_BIN from the runtime environment
+          # first, then falls back to "rofi" on PATH for plain `cargo run`.
+          # Consumers wanting a baked-in rofi can `overrideAttrs` to set
+          # `ROFI_BIN = "${their-rofi}/bin/rofi"`.
         };
 
         # Build *just* the cargo dependencies, so we can reuse
